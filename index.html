@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Neighborhood Map</title>
+        <link rel="stylesheet" href="css/styles.css">
+        <link href="css/lib/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <nav>
+            <h3>The best places</h3>
+            <input id="search-filter" placeholder="Filter this list..." data-bind="textInput: placeListFilter">
+            <span class="fa fa-filter" aria-hidden="true"></span>
+            <ul id="location-items" data-bind="foreach: visiblePlaceList">
+                <li class="loc-item" data-bind="text: name, click: $parent.setHighlightedPlace"></li>
+            </ul>
+        </nav>
+        <main>
+            <div id="map"></div>
+            <div id="placeInfo" class="hidden" >
+                <h1 data-bind="text: highlightedPlace().name"></h1>
+                <h2 id="exitPlaceInfo" data-bind="click: removeHighlightedPlace">X</h2>
+            </div>
+        </main>
+
+        <script src="js/lib/knockout-3.4.2.js"></script>
+        <script src="js/place.js" async></script>
+        <script src="js/map.js" async></script>
+        <script src="js/main.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=init&key=AIzaSyAlBvvWTlQmn-wLFl0bM6JVS3SRp-gCwQg" async defer></script>
+    </body>
+</html>
