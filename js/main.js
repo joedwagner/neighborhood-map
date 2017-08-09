@@ -3,10 +3,6 @@ function init() {
     // Create the map
     var map = initMap();
 
-    if (map === null) {
-        document.getElementById('map').innerHTML = "No map could be display.";
-    }
-
     // Create the ViewModel
     var vM = new ViewModel(placeList, map);
     ko.applyBindings(vM);
@@ -14,9 +10,18 @@ function init() {
 }
 
 // Create the ViewModel class to go between models and views
+// Code based on Knockout.js documentation
 var ViewModel = function (placeList, map) {
 
     var self = this;
+
+    self.menuState = ko.observable('menu');
+
+    self.toggleNav = function() {
+        var leftValue = document.getElementById('nav').style.left;
+        document.getElementById('nav').style.left = (leftValue === '0px' ? '-150px' : 0);
+        self.menuState(self.menuState() === 'menu' ? 'close menu' : 'menu');
+    }
 
     // Create observable placeList
     self.placeList = ko.observableArray();
@@ -24,6 +29,10 @@ var ViewModel = function (placeList, map) {
     placeList.forEach(function (place) {
         self.placeList().push(new Place(place));
     });
+
+    self.showInputBox = function () {
+        self.filterClicked(!self.filterClicked());
+    }
 
     self.placeList().forEach(function (place) {
         place.marker = new google.maps.Marker({
@@ -56,6 +65,7 @@ var ViewModel = function (placeList, map) {
     self.visiblePlaceList = ko.observableArray(self.placeList());
 
     // Filter for list/map when text is entered
+    // Code inspired by Knockout.js documentation on Computed observables
     self.placeListFilter = ko.pureComputed({
         read: function() {
             return "";
@@ -71,7 +81,6 @@ var ViewModel = function (placeList, map) {
                 if (place.name().toLowerCase().includes(value.toLowerCase())) {
                     self.visiblePlaceList.push(place);
                     place.marker.setMap(map);
-                    self.removeHighlightedPlace();
                 }
             });
         },
@@ -80,20 +89,85 @@ var ViewModel = function (placeList, map) {
 
     self.highlightedPlace = ko.observable({name: ""});
 
-    self.setHighlightedPlace = function (place) {
-        if (self.highlightedPlace().marker) {
-            self.highlightedPlace().marker.setAnimation(null);
-        }
-        self.highlightedPlace(place);
-        self.highlightedPlace().marker.setAnimation(google.maps.Animation.BOUNCE);
-        document.getElementById('placeInfo').classList.remove('hidden');
-    };
+    // To be displayed in placeInfo slide-in div
+    self.highlightedPlaceName = ko.observable("");
+    self.highlightedPlaceAddress = ko.observable();
+    self.highlightedPlacePhone = ko.observable();
+    self.highlightedPlaceCheckins = ko.observable();
+    self.highlightedPlaceUsers = ko.observable();
+    self.highlightedPlaceMenuLink = ko.observable();
+    self.highlightedPlaceVenueLink = ko.observable();
 
     self.addEvents();
 
+    self.setHighlightedPlace = function (place) {
+
+        // Stop marker bouncing
+        if (self.highlightedPlace().marker) {
+            self.highlightedPlace().marker.setAnimation(null);
+        }
+
+        // Only allow place information to display if map was loaded correctly
+        if (document.getElementsByClassName('gm-err-container').length === 0) {
+
+            // Switch the highlighted place and make its marker bounce
+            self.highlightedPlace(place);
+            self.highlightedPlace().marker.setAnimation(google.maps.Animation.BOUNCE);
+
+            // Show the place details div
+            document.getElementById('placeInfo').classList.remove('hidden');
+
+            // Recenter map, then move up to make room for div sliding from bottom
+            map.setCenter(getCenter(self.placeList()));
+            map.setCenter({lat: map.getCenter().lat() - .002, lng: map.getCenter().lng()});
+
+            self.getPlaceInfo(place);
+
+        }
+    };
+
+    self.getPlaceInfo = function (place) {
+
+        // Get the place information from Foursquare API
+        // Source: https://developer.foursquare.com/docs/venues/venues
+        var url = 'https://api.foursquare.com/v2/venues/search?' +
+        'll=' + place.location().lat + ', ' + place.location().lng +
+        '&client_id=ZJ5U0M0LNOD2FUM33OKNRXU4LXSXIFHPQM0OJEQAN2VFZXB2' +
+        '&client_secret=WBVIJMBG5G5LBHIFJSUZILZNKMD0YVKCTRHWFYZN15DC4B1H' +
+        '&v=20170731' +
+        '&limit=1';
+
+        // In case anything goes wrong
+        var errorString = '<p>Unable to retrieve location information for ' + self.highlightedPlace().name() + '.</p>';
+
+        $.ajax(url, {
+            success: function (data) {
+                if (data.response.venues.length > 0) {
+                    var venue = data.response.venues[0];
+                    self.highlightedPlaceName(venue.name ? venue.name : 'No address found');
+                    self.highlightedPlaceAddress(venue.location.address ? venue.location.address : 'No address available');
+                    self.highlightedPlacePhone(venue.contact.formattedPhone ? venue.contact.formattedPhone : 'No phone # available');
+                    self.highlightedPlaceCheckins(venue.stats.checkinsCount ? venue.stats.checkinsCount : '0');
+                    self.highlightedPlaceUsers(venue.stats.usersCount ? venue.stats.usersCount : '0');
+                    self.highlightedPlaceMenuLink(venue.hasMenu ?  venue.menu.url : false);
+                    self.highlightedPlaceVenueLink('https://foursquare.com/v/' + venue.id);
+                } else {
+                    document.getElementById('placeInfo').innerHTML = errorString;
+                }
+            },
+            error: function () {
+                document.getElementById('placeInfo').innerHTML = errorString;
+            }
+        });
+    }
+
     self.removeHighlightedPlace = function () {
+        self.highlightedPlace().marker.setAnimation(null);
         document.getElementById('placeInfo').classList.add('hidden');
         self.highlightedPlace("");
+
+        map.setCenter(getCenter(self.placeList()));
+
     }
 }
 

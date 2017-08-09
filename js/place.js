@@ -9,29 +9,29 @@ var placeList = [
     {
         name: 'Monicals',
         location: {
-            lat: 40.192528,
-            lng: -88.399960
+            lat: 40.192680,
+            lng: -88.399888
+        }
+    },
+    {
+        name: 'Hen House',
+        location: {
+            lat: 40.196687,
+            lng: -88.397949
+        }
+    },
+    {
+        name: 'Los Zarapes',
+        location: {
+            lat: 40.196801,
+            lng: -88.396100
         }
     },
     {
         name: 'Arbys',
         location: {
-            lat: 40.196382,
-            lng: -88.399357
-        }
-    },
-    {
-        name: 'Charleys Philly Steak',
-        location: {
-            lat: 40.195606,
-            lng: -88.399928
-        }
-    },
-    {
-        name: 'JT Walkers',
-        location: {
-            lat: 40.194967,
-            lng: -88.403989
+            lat: 40.196544,
+            lng: -88.399344
         }
     }
 ];
