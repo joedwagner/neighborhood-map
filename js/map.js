@@ -23,7 +23,7 @@ function initMap() {
     // Re-center map when the div is resized
     map.addListener('resize', function () {
         map.setCenter(mahomet);
-    })
+    });
 
     return map;
 }

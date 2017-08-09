@@ -41,4 +41,4 @@ var Place = function (placeObj) {
     this.name = ko.observable(placeObj.name);
     this.location = ko.observable(placeObj.location);
 
-}
+};

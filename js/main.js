@@ -21,7 +21,7 @@ var ViewModel = function (placeList, map) {
         var leftValue = document.getElementById('nav').style.left;
         document.getElementById('nav').style.left = (leftValue === '0px' ? '-150px' : 0);
         self.menuState(self.menuState() === 'menu' ? 'close menu' : 'menu');
-    }
+    };
 
     // Create observable placeList
     self.placeList = ko.observableArray();
@@ -32,7 +32,7 @@ var ViewModel = function (placeList, map) {
 
     self.showInputBox = function () {
         self.filterClicked(!self.filterClicked());
-    }
+    };
 
     self.placeList().forEach(function (place) {
         place.marker = new google.maps.Marker({
@@ -55,9 +55,9 @@ var ViewModel = function (placeList, map) {
         self.placeList().forEach(function (place) {
             place.marker.addListener('click', function() {
                 self.setHighlightedPlace(place);
-            })
+            });
         });
-    }
+    };
 
     self.placeMarkers(self.placeList());
 
@@ -119,7 +119,7 @@ var ViewModel = function (placeList, map) {
 
             // Recenter map, then move up to make room for div sliding from bottom
             map.setCenter(getCenter(self.placeList()));
-            map.setCenter({lat: map.getCenter().lat() - .002, lng: map.getCenter().lng()});
+            map.setCenter({lat: map.getCenter().lat() - 0.002, lng: map.getCenter().lng()});
 
             self.getPlaceInfo(place);
 
@@ -159,7 +159,7 @@ var ViewModel = function (placeList, map) {
                 document.getElementById('placeInfo').innerHTML = errorString;
             }
         });
-    }
+    };
 
     self.removeHighlightedPlace = function () {
         self.highlightedPlace().marker.setAnimation(null);
@@ -168,6 +168,6 @@ var ViewModel = function (placeList, map) {
 
         map.setCenter(getCenter(self.placeList()));
 
-    }
-}
+    };
+};
 
