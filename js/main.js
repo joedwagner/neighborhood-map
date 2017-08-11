@@ -77,10 +77,10 @@ var ViewModel = function (placeList, map) {
             // Loop through places and figure out which match user input
             // Add the place / marker to the visible lists
             self.placeList().forEach(function (place) {
-                place.marker.setMap(null);
+                place.marker.setVisible(false);
                 if (place.name().toLowerCase().includes(value.toLowerCase())) {
                     self.visiblePlaceList.push(place);
-                    place.marker.setMap(map);
+                    place.marker.setVisible(true);
                 }
             });
         },
