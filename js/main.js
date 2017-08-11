@@ -118,8 +118,7 @@ var ViewModel = function (placeList, map) {
             document.getElementById('placeInfo').classList.remove('hidden');
 
             // Recenter map, then move up to make room for div sliding from bottom
-            map.setCenter(getCenter(self.placeList()));
-            map.setCenter({lat: map.getCenter().lat() - 0.002, lng: map.getCenter().lng()});
+K            map.panTo(self.highlightedPlace().marker.getPosition());
 
             self.getPlaceInfo(place);
 
