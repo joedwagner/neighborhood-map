@@ -67,6 +67,9 @@ li {
     bottom: 35%;
     transition: bottom .2s ease-out;
     background-color: #432818;
+}
+
+#infoFound {
     display: flex;
     flex-wrap: wrap;
 }

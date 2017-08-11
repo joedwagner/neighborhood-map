@@ -30,19 +30,24 @@
         <main id="map"></main>
 
         <div id="placeInfo" class="hidden">
-            <h2 data-bind="text: highlightedPlaceName"></h2>
-            <h3 id="exitPlaceInfo" data-bind="click: removeHighlightedPlace">Close</h3>
-            <div class="half-box">
-                <p data-bind="text: highlightedPlaceAddress"></p>
-                <p data-bind="text: highlightedPlacePhone"></p>
+            <div id="infoFound" data-bind="if: apiSuccess">
+                <h2 data-bind="text: highlightedPlaceName"></h2>
+                <h3 id="exitPlaceInfo" data-bind="click: removeHighlightedPlace">Close</h3>
+                <div class="half-box">
+                    <p data-bind="text: highlightedPlaceAddress"></p>
+                    <p data-bind="text: highlightedPlacePhone"></p>
+                </div>
+                <div class="half-box">
+                    <p><span data-bind="text: highlightedPlaceCheckins"></span> Checkins</p>
+                    <p><span data-bind="text: highlightedPlaceUsers"></span> Users</p>
+                </div>
+                <p class="half-box"><a id="menuLink" data-bind="visible: highlightedPlaceMenuLink, attr: {href: highlightedPlaceMenuLink}" target="_blank">Link to menu</a></p>
+                <div id="imageBox">
+                    <a data-bind="attr: {href: highlightedPlaceVenueLink}" target="_blank"><img src="img/Powered-by-Foursquare-full-color-300.png" alt="Powered by Foursquare"></a>
+                </div>
             </div>
-            <div class="half-box">
-                <p> <span data-bind="text: highlightedPlaceCheckins"></span> Checkins</p>
-                <p> <span data-bind="text: highlightedPlaceUsers"></span> Users</p>
-            </div>
-            <p class="half-box"><a id="menuLink" data-bind="visible: highlightedPlaceMenuLink, attr: {href: highlightedPlaceMenuLink}" target="_blank">Link to menu</a></p>
-            <div id="imageBox">
-                <a data-bind="attr: {href: highlightedPlaceVenueLink}" target="_blank"><img src="img/Powered-by-Foursquare-full-color-300.png" alt="Powered by Foursquare"></a>
+            <div id="infoError" data-bind="ifnot: apiSuccess">
+                <h1>Unable to retrieve location information for <span data-bind="text: highlightedPlace().name"></span>.</h1>
             </div>
         </div>
 
@@ -51,6 +56,8 @@
         <script src="js/place.js"></script>
         <script src="js/map.js"></script>
         <script src="js/main.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=init&key=AIzaSyAlBvvWTlQmn-wLFl0bM6JVS3SRp-gCwQg " async defer></script>
+        <script>
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=init&key=AIzaSyAlBvvWTlQmn-wLFl0bM6JVS3SRp-gCwQg" onerror="init('error')" async defer></script>
     </body>
 </html>
