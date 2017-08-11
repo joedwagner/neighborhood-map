@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
+
+        <!-- meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <title>Neighborhood Map</title>
+
+        <!-- css imports-->
         <link rel="stylesheet" href="css/styles.css">
         <link href="css/lib/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
     </head>
     <body>
-        <div id="hamMenu" data-bind="click: toggleNav">
+        <div class="hamMenu menu-hidden" data-bind="click: toggleNav">
             <p data-bind="text: menuState">Menu</p>
         </div>
-        <nav id="nav">
+        <nav id="nav" data-bind="style: { left: navHidden() ? '-150px' : '0px' }">
             <h1>Mahomet's Best Eats</h1>
             <div id="search">
                 <span class="fa fa-filter" aria-hidden="true" data-bind="click: showInputBox"></span>

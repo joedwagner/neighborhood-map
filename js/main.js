@@ -16,11 +16,11 @@ var ViewModel = function (placeList, map) {
     var self = this;
 
     self.menuState = ko.observable('menu');
+    self.navHidden = ko.observable(true);
 
     self.toggleNav = function() {
-        var leftValue = document.getElementById('nav').style.left;
-        document.getElementById('nav').style.left = (leftValue === '0px' ? '-150px' : 0);
         self.menuState(self.menuState() === 'menu' ? 'close menu' : 'menu');
+        self.navHidden(!self.navHidden());
     };
 
     // Create observable placeList

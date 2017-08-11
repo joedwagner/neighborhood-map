@@ -116,6 +116,10 @@ img {
     width: 5%;
 }
 
+.menu-hidden {
+    display: none;
+}
+
 @media screen and (min-width: 720px) and (max-width: 935px) {
     h1 {
         font-size: 1.5em;
@@ -128,9 +132,6 @@ img {
     #exitPlaceInfo {
         font-size: 1.25em;
     }
-    /*#placeInfo {
-        font-size: .8em;
-    }*/
 }
 
 @media screen and (max-width: 719px) {
@@ -165,7 +166,7 @@ img {
         font-size: 1em;
     }
 
-    #hamMenu {
+    .hamMenu {
         height: 50px;
         width: 50px;
         position: absolute;
